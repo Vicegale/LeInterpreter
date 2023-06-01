@@ -1,6 +1,6 @@
 pub struct Token  {
      pub kind: TokenKind,
-     pub literal: char 
+     pub literal: String 
 }
 
 #[derive(Debug)]
