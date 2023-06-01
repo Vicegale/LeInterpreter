@@ -45,6 +45,9 @@ impl Lexer {
             ';' => {
                 tok = Lexer::new_token(TokenKind::SEMICOLON, self.ch);
             }
+            '\0' => {
+                tok = Lexer::new_token(TokenKind::EOF, self.ch);
+            }
             _ => {
                 tok = Lexer::new_token(TokenKind::ILLEGAL, self.ch);
             }
@@ -76,16 +79,22 @@ mod tests {
     #[test]
     fn test_next_token() {
         let input = String::from("=+(){},;");
+        let expected_output = [ 
+            Token {kind: TokenKind::ASSIGN, literal: '='},
+            Token {kind: TokenKind::PLUS, literal: '+'},
+            Token {kind: TokenKind::LPAREN, literal: '('},
+            Token {kind: TokenKind::RPAREN, literal: ')'},
+            Token {kind: TokenKind::LBRACE, literal: '{'},
+            Token {kind: TokenKind::RBRACE, literal: '}'},
+            Token {kind: TokenKind::COMMA, literal: ','},
+            Token {kind: TokenKind::SEMICOLON, literal: ';'},
+            Token {kind: TokenKind::EOF, literal: '\0'}
+            ];
         let mut l = Lexer::new(input);
-        let t = l.next_token();
-        assert_eq!(t.kind, TokenKind::ASSIGN);
-        assert_eq!(t.literal, '=');
-        assert_eq!(l.next_token().kind, TokenKind::PLUS);
-        assert_eq!(l.next_token().kind, TokenKind::LPAREN);
-        assert_eq!(l.next_token().kind, TokenKind::RPAREN);
-        assert_eq!(l.next_token().kind, TokenKind::LBRACE);
-        assert_eq!(l.next_token().kind, TokenKind::RBRACE);
-        assert_eq!(l.next_token().kind, TokenKind::COMMA);
-        assert_eq!(l.next_token().kind, TokenKind::SEMICOLON);
+        for out in expected_output.iter() {
+            let t = l.next_token();
+            assert_eq!(t.kind, out.kind);
+            assert_eq!(t.literal, out.literal);
+        }
     }
 }
