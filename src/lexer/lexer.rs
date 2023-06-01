@@ -79,22 +79,26 @@ mod tests {
     #[test]
     fn test_next_token() {
         let input = String::from("=+(){},;");
+        struct ExpectedToken {
+            expected_kind: TokenKind,
+            expected_literal: char
+        }
         let expected_output = [ 
-            Token {kind: TokenKind::ASSIGN, literal: '='},
-            Token {kind: TokenKind::PLUS, literal: '+'},
-            Token {kind: TokenKind::LPAREN, literal: '('},
-            Token {kind: TokenKind::RPAREN, literal: ')'},
-            Token {kind: TokenKind::LBRACE, literal: '{'},
-            Token {kind: TokenKind::RBRACE, literal: '}'},
-            Token {kind: TokenKind::COMMA, literal: ','},
-            Token {kind: TokenKind::SEMICOLON, literal: ';'},
-            Token {kind: TokenKind::EOF, literal: '\0'}
+            ExpectedToken {expected_kind: TokenKind::ASSIGN, expected_literal: '='},
+            ExpectedToken {expected_kind: TokenKind::PLUS, expected_literal: '+'},
+            ExpectedToken {expected_kind: TokenKind::LPAREN, expected_literal: '('},
+            ExpectedToken {expected_kind: TokenKind::RPAREN, expected_literal: ')'},
+            ExpectedToken {expected_kind: TokenKind::LBRACE, expected_literal: '{'},
+            ExpectedToken {expected_kind: TokenKind::RBRACE, expected_literal: '}'},
+            ExpectedToken {expected_kind: TokenKind::COMMA, expected_literal: ','},
+            ExpectedToken {expected_kind: TokenKind::SEMICOLON, expected_literal: ';'},
+            ExpectedToken {expected_kind: TokenKind::EOF, expected_literal: '\0'}
             ];
         let mut l = Lexer::new(input);
         for out in expected_output.iter() {
             let t = l.next_token();
-            assert_eq!(t.kind, out.kind);
-            assert_eq!(t.literal, out.literal);
+            assert_eq!(t.kind, out.expected_kind);
+            assert_eq!(t.literal, out.expected_literal);
         }
     }
 }
