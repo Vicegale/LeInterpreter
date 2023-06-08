@@ -1,5 +1,3 @@
-use phf::phf_map;
-
 pub struct Token  {
      pub kind: TokenKind,
      pub literal: String 
@@ -47,13 +45,18 @@ pub enum TokenKind {
     RETURN
 }
 
-pub const KEYWORDS: phf::Map<&'static str, TokenKind> = phf_map! {
-    "let" => TokenKind::LET,
-    "fn" => TokenKind::FUNCTION
-};
+pub fn get_keyword(str: &str) -> Option<TokenKind> {
+    if str == "let" {
+        return Some(TokenKind::LET);
+    } else if str == "fn" {
+        return Some(TokenKind::FUNCTION);
+    } else {
+        return None;
+    }
+}
 
 pub fn resolve_identifier(str: &str) -> TokenKind {
-    let keyword = KEYWORDS.get(str);
+    let keyword = get_keyword(str); 
     match keyword {
         Some(x) => return x.clone(),
         None => return TokenKind::IDENT
