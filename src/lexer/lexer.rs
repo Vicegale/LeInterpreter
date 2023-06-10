@@ -28,6 +28,24 @@ impl Lexer {
             '+' => {
                 tok = Lexer::new_token(TokenKind::PLUS, self.ch.into());
             }
+            '-' => {
+                tok = Lexer::new_token(TokenKind::MINUS, self.ch.into());
+            }
+            '*' => {
+                tok = Lexer::new_token(TokenKind::ASTERISK, self.ch.into());
+            }
+            '/' => {
+                tok = Lexer::new_token(TokenKind::SLASH, self.ch.into());
+            }
+            '!' => {
+                tok = Lexer::new_token(TokenKind::BANG, self.ch.into());
+            }
+            '<' => {
+                tok = Lexer::new_token(TokenKind::LT, self.ch.into());
+            }
+            '>' => {
+                tok = Lexer::new_token(TokenKind::GT, self.ch.into());
+            }
             '(' => {
                 tok = Lexer::new_token(TokenKind::LPAREN, self.ch.into());
             }
@@ -155,6 +173,8 @@ mod tests {
                                  }
 
                                  let result = add(five, ten);
+                                 !-/*5;
+                                 5 < 10 > 5; 
                                  ");
         struct ExpectedToken {
             expected_kind: TokenKind,
@@ -196,7 +216,18 @@ mod tests {
             ExpectedToken {expected_kind: TokenKind::IDENT, expected_literal: String::from("ten")},
             ExpectedToken {expected_kind: TokenKind::RPAREN, expected_literal: String::from(")")},
             ExpectedToken {expected_kind: TokenKind::SEMICOLON, expected_literal: String::from(";")},
-            ExpectedToken {expected_kind: TokenKind::EOF, expected_literal: String::from("\0")}
+            ExpectedToken {expected_kind: TokenKind::BANG, expected_literal: String::from("!")},
+            ExpectedToken {expected_kind: TokenKind::MINUS, expected_literal: String::from("-")},
+            ExpectedToken {expected_kind: TokenKind::SLASH, expected_literal: String::from("/")},
+            ExpectedToken {expected_kind: TokenKind::ASTERISK, expected_literal: String::from("*")},
+            ExpectedToken {expected_kind: TokenKind::INT, expected_literal: String::from("5")},
+            ExpectedToken {expected_kind: TokenKind::SEMICOLON, expected_literal: String::from(";")},
+            ExpectedToken {expected_kind: TokenKind::INT, expected_literal: String::from("5")},
+            ExpectedToken {expected_kind: TokenKind::LT, expected_literal: String::from("<")},
+            ExpectedToken {expected_kind: TokenKind::INT, expected_literal: String::from("10")},
+            ExpectedToken {expected_kind: TokenKind::GT, expected_literal: String::from(">")},
+            ExpectedToken {expected_kind: TokenKind::INT, expected_literal: String::from("5")},
+            ExpectedToken {expected_kind: TokenKind::SEMICOLON, expected_literal: String::from(";")}
         ];
 
         let mut l = Lexer::new(input);
